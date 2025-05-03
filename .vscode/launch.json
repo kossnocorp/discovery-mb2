@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "debug-meet-your-software",
+      "type": "probe-rs-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/mdbook/src/05-meet-your-software",
+      "preLaunchTask": "build-meet-your-software",
+      "runtimeExecutable": "probe-rs",
+      "runtimeArgs": ["dap-server"],
+      "chip": "nRF52833_xxAA",
+      "flashingConfig": {
+        "flashingEnabled": true,
+        "haltAfterReset": false,
+        "formatOptions": {}
+      },
+      "coreConfigs": [
+        {
+          "coreIndex": 0,
+          "programBinary": "${workspaceFolder}/target/thumbv7em-none-eabihf/debug/examples/init"
+        }
+      ],
+      "env": {
+        "RUST_LOG": "info"
+      },
+      "consoleLogLevel": "Console"
+    }
+  ]
+}

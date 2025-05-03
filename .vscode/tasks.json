@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-meet-your-software",
+      "type": "shell",
+      "command": "cargo",
+      "args": ["build", "--example", "init"],
+      "options": {
+        "cwd": "${workspaceFolder}/mdbook/src/05-meet-your-software"
+      },
+      "problemMatcher": ["$rustc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
