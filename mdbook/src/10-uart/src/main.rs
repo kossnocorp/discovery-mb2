@@ -1,12 +1,16 @@
 #![no_main]
 #![no_std]
 
-use core::fmt::Write;
+use cortex_m::asm::wfi;
 use cortex_m_rt::entry;
-use heapless::Vec;
-use microbit::hal::uarte::{self, Baudrate, Parity};
 use panic_rtt_target as _;
 use rtt_target::rtt_init_print;
+
+use microbit::{
+    hal::uarte,
+    hal::uarte::{Baudrate, Parity},
+};
+
 use serial_setup::UartePort;
 
 #[entry]
@@ -24,28 +28,15 @@ fn main() -> ! {
         UartePort::new(serial)
     };
 
-    // A buffer with 32 bytes of capacity
-    let mut buffer: Vec<u8, 32> = Vec::new();
+    for char in "The quick brown fox jumps over the lazy dog."
+        .as_bytes()
+        .iter()
+    {
+        serial.write(*char).unwrap();
+    }
+    serial.flush().unwrap();
 
     loop {
-        buffer.clear();
-
-        loop {
-            // We assume that the receiving cannot fail
-            let byte = serial.read().unwrap();
-
-            if buffer.push(byte).is_err() {
-                write!(serial, "error: buffer full\r\n").unwrap();
-                break;
-            }
-
-            if byte == b'\r' {
-                for byte in buffer.iter().rev().chain(&[b'\n', b'\r']) {
-                    serial.write(*byte).unwrap();
-                }
-                break;
-            }
-        }
-        serial.flush().unwrap()
+        wfi();
     }
 }
